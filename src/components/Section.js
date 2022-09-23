@@ -39,20 +39,24 @@ const Section = function(
                 table = {table}/>)
             }
 
+
+        {/* Home */}
+        {category == 5 && <></>}
+
         {/* Favorite Category */}
     
-        {category == 5 && 
+        {category == 6 && 
             (<div className = "category">
-                <h1 className = "category-title">Favorite Books</h1> 
-                <div className = "book-flex">  
+                <h1 className = "category__title">Favorite Books</h1> 
+                <div className = "book book--flex">  
                     {favoriteArray.map(function(item){
                         let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
                         return (
                                 <div className = "book-item">
-                                    <img src = {thumbnail}></img>
-                                    <h4>{item.volumeInfo.title}</h4>
-                                    <h5>{item.volumeInfo.authors}</h5>
-                                    <h5 className = "remove" onClick = {function(){removeFavorite(item.id)}}>remove</h5>
+                                    <img className = "book-item__img" src = {thumbnail}></img>
+                                    <h4 className = "book-item__title">{item.volumeInfo.title}</h4>
+                                    <h5 className = "book-item__authors">{item.volumeInfo.authors}</h5>
+                                    <h5 className = "book-item--remove" onClick = {function(){removeFavorite(item.id)}}>remove</h5>
                                 </div>
                             )
                     })}
@@ -62,18 +66,18 @@ const Section = function(
 
         {/*To read category */}
 
-        {category == 6 && 
+        {category == 7 && 
             (<div className = "category">
-                <h1 className = "category-title">To Read</h1> 
-                <div className = "book-flex">  
+                <h1 className = "category__title">To Read</h1> 
+                <div className = "book book--flex">  
                     {toReadArray.map(function(item){
                         let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
                         return (
                                 <div className = "book-item">
-                                    <img src = {thumbnail}></img>
-                                    <h4>{item.volumeInfo.title}</h4>
-                                    <h5>{item.volumeInfo.authors}</h5>
-                                    <h5 className = "remove" onClick = {function(){removeToRead(item.id)}} >remove</h5>
+                                    <img className = "book-item__img" src = {thumbnail}></img>
+                                    <h4 className = "book-item__title">{item.volumeInfo.title}</h4>
+                                    <h5 className = "book-item__authors">{item.volumeInfo.authors}</h5>
+                                    <h5 className = "book-item--remove" onClick = {function(){removeToRead(item.id)}} >remove</h5>
                                 </div>
                             )
                     })}
@@ -83,18 +87,18 @@ const Section = function(
 
          {/*Reading Now category */}
 
-         {category == 7 && 
+         {category == 8 && 
             (<div className = "category">
-                <h1 className = "category-title">Reading Now</h1> 
-                <div className = "book-flex">  
+                <h1 className = "category__title">Reading Now</h1> 
+                <div className = "book book--flex">  
                     {readingNowArray.map(function(item){
                         let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
                         return (
                                 <div className = "book-item">
-                                    <img src = {thumbnail}></img>
-                                    <h4>{item.volumeInfo.title}</h4>
-                                    <h5>{item.volumeInfo.authors}</h5>
-                                    <h5 className = "remove" onClick = {function(){removeReadingNow(item.id)}}>remove</h5>
+                                    <img className = "book-item__img" src = {thumbnail}></img>
+                                    <h4 className = "book-item__title">{item.volumeInfo.title}</h4>
+                                    <h5 className = "book-item__authors">{item.volumeInfo.authors}</h5>
+                                    <h5 className = "book-item--remove" onClick = {function(){removeReadingNow(item.id)}}>remove</h5>
                                 </div>
                             )
                     })}
@@ -104,27 +108,24 @@ const Section = function(
 
          {/*Have read category */}
 
-         {category == 8 && 
+         {category == 9 && 
             (<div className = "category">
-                <h1 className = "category-title">Have Read</h1> 
-                <div className = "book-flex">  
+                <h1 className = "category__title">Have Read</h1> 
+                <div className = "book--flex">  
                     {haveReadArray.map(function(item){
                         let thumbnail = item.volumeInfo.imageLinks && item.volumeInfo.imageLinks.smallThumbnail;
                         return (
                                 <div className = "book-item">
-                                    <img src = {thumbnail}></img>
-                                    <h4>{item.volumeInfo.title}</h4>
-                                    <h5>{item.volumeInfo.authors}</h5>
-                                    <h5 className = "remove" onClick = {function(){removeHaveRead(item.id)}}>remove</h5>
+                                    <img className = "book-item__img" src = {thumbnail}></img>
+                                    <h4 className = "book-item__title">{item.volumeInfo.title}</h4>
+                                    <h5 className = "book-item__authors">{item.volumeInfo.authors}</h5>
+                                    <h5 className = "book-item--remove" onClick = {function(){removeHaveRead(item.id)}}>remove</h5>
                                 </div>
                             )
                     })}
                 </div>
             </div>)
         }
-
-{category == 9 && <></>}
-
         </section>
     )
 }

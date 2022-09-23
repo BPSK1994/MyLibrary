@@ -185,7 +185,7 @@ const App = function() {
         }))
     }
 
-    
+
 
     // Remove books from 'have read' books array
     const removeHaveRead = function(id) {
@@ -216,9 +216,9 @@ const App = function() {
         <div className = "container">
             <div className = "sidebar-container">
                 <Header />
-                <div className = "form-container">
-                    <form className = "form-control" onSubmit = {handleSubmit}>
-                        <input className = "form-input"
+                <div className = "form">
+                    <form className = "form__control" onSubmit = {handleSubmit}>
+                        <input className = "form__input"
                             type = "text"
                             value = {input}
                             placeholder = "Search for books..."

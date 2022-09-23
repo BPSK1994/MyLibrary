@@ -68,42 +68,42 @@ const Modal = function(
         }
             return (
                 <>
-               {showModal && (<div className = "popup">
-                    <div className = "popup__content">
-                        <div className = "popup__header">
-                            <h1 className = "popup__title">Add to my library</h1>
-                            <button className = "popup__btn" onClick = {function(){dontShowModal(); dontShowCheck();}}><i className = "fa-solid fa-xmark"></i></button>
+               {showModal && (<div className = "modal">
+                    <div className = "modal__content">
+                        <div className = "modal__header">
+                            <h1 className = "modal__title">Add to my library</h1>
+                            <button className = "modal__btn" onClick = {function(){dontShowModal(); dontShowCheck();}}><i className = "fa-solid fa-xmark"></i></button>
                         </div>
-                        <div className = "popup-section">
-                            <img className = "popup__img" src = {thumbnail}></img>
-                            <div className = "popup__info">
-                                <h3 className = "book-title">{book.volumeInfo.title}</h3>
-                                <h5 className = "book-author">{book.volumeInfo.authors} - {book.volumeInfo.publishedDate}</h5>
-                                <h6 className = "book-description">{book.volumeInfo.description}</h6>
+                        <div className = "modal-book">
+                            <img className = "modal-book__img" src = {thumbnail}></img>
+                            <div className = "modal-book__info">
+                                <h3 className = "modal-book__title">{book.volumeInfo.title}</h3>
+                                <h5 className = "modal-book__author">{book.volumeInfo.authors} - {book.volumeInfo.publishedDate}</h5>
+                                <h6 className = "modal-book__description">{book.volumeInfo.description}</h6>
                             </div>
                         </div>
 
-                        <div className = "popup-categories">
-                            <div className = "popup-category"
+                        <div className = "modal__categories">
+                            <div className = "modal__category"
                                  id = "1" 
                                  onClick = {function(event) {showCheck(event.currentTarget.id);} }>
                                     {choice[0].check && <i className = "fa-solid fa-check"></i>}<span>Favorites</span>
                             </div>
 
-                            <div className = "popup-category"
+                            <div className = "modal__category"
                                  id = "2"
                                  onClick = {function(event){showCheck(event.currentTarget.id)}}>
                                     {choice[1].check && <i className = "fa-solid fa-check"></i>}<span>To Read</span>
                             </div>
 
 
-                            <div className = "popup-category"
+                            <div className = "modal__category"
                                  id = "3" 
                                  onClick = {function(event){showCheck(event.currentTarget.id)}}>
                                     {choice[2].check && <i className = "fa-solid fa-check"></i>}<span>Reading Now</span>
                             </div>
 
-                            <div className = "popup-category"
+                            <div className = "modal__category"
                                  id = "4" 
                                  onClick = {function(event){showCheck(event.currentTarget.id)}}>
                                     {choice[3].check && <i className = "fa-solid fa-check"></i>}<span>Have Read</span>

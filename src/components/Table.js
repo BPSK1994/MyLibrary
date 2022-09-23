@@ -32,16 +32,16 @@ const Table = function(
     return (
         <div className = "table-container">
            {table && (
-           <table>
-            <thead className = "table-head table-head--flex">
-                <tr className = "heading-row">
-                    <th>#</th>
-                    <th>Image</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Published</th>
-                    <th>Page Count</th>
-                    <th>Language</th>
+           <table className = "table" >
+            <thead>
+                <tr>
+                    <th className = "table__heading">#</th>
+                    <th className = "table__heading">Image</th>
+                    <th className = "table__heading">Title</th>
+                    <th className = "table__heading">Author</th>
+                    <th className = "table__heading">Published</th>
+                    <th className = "table__heading">Page Count</th>
+                    <th className = "table__heading">Language</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,16 +51,16 @@ const Table = function(
                    if(thumbnail != undefined) {
                     return(
                         <tr>
-                            <td>{index + 1}</td>
-                            <td ><img className = "table-image"
+                            <td className = "table__data">{index + 1}</td>
+                            <td className = "table__data" ><img className = "table__image"
                                      src = {thumbnail}
                                      onClick = {function(event){toggleModal(event); displayBook(item);}}
                                      ></img></td>
-                            <td>{item.volumeInfo.title}</td>
-                            <td>{item.volumeInfo.authors}</td>
-                            <td>{item.volumeInfo.publishedDate}</td>
-                            <td>{item.volumeInfo.pageCount}</td>
-                            <td>{item.volumeInfo.language}</td>
+                            <td className = "table__data">{item.volumeInfo.title}</td>
+                            <td className = "table__data">{item.volumeInfo.authors}</td>
+                            <td className = "table__data">{item.volumeInfo.publishedDate}</td>
+                            <td className = "table__data">{item.volumeInfo.pageCount}</td>
+                            <td className = "table__data">{item.volumeInfo.language}</td>
                         </tr>
                     );
                    }
