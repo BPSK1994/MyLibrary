@@ -1,33 +1,29 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import { appContext } from './App';
 
 const Modal = function(
     {
         showModal,
         dontShowModal,
-        book,
-        favorite,
-        toRead,
-        readingNow,
-        haveRead
+        book
     }
 ) {  
-        let thumbnail = book && book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.smallThumbnail;
 
         const[choice, setChoice] = React.useState([
             {
-                id: 1,
+                id: "modal-favorite",
                 check: false
             },
             {
-                id: 2,
+                id: "modal-toRead",
                 check: false
             },
             {
-                id: 3,
+                id: "modal-readingNow",
                 check: false
             },
             {
-                id: 4,
+                id: "modal-haveRead",
                 check: false
             }
 
@@ -53,11 +49,10 @@ const Modal = function(
                         prevState.map(function(item) {
                             return { ...item, check: false}
                         })
-                    )
+                    );
                 })
-            )
-            
-        }
+            );
+        };
 
 
         const sendToCategories = function() {
@@ -66,6 +61,11 @@ const Modal = function(
             {choice[2].check && readingNow(book)};
             {choice[3].check && haveRead(book)};
         }
+
+            const {favorite, toRead, readingNow, haveRead} = useContext(appContext);
+
+            let thumbnail = book && book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.smallThumbnail;
+
             return (
                 <>
                {showModal && (<div className = "modal">
@@ -85,26 +85,26 @@ const Modal = function(
 
                         <div className = "modal__categories">
                             <div className = "modal__category"
-                                 id = "1" 
+                                 id = "modal-favorite" 
                                  onClick = {function(event) {showCheck(event.currentTarget.id);} }>
                                     {choice[0].check && <i className = "fa-solid fa-check"></i>}<span>Favorites</span>
                             </div>
 
                             <div className = "modal__category"
-                                 id = "2"
+                                 id = "modal-toRead"
                                  onClick = {function(event){showCheck(event.currentTarget.id)}}>
                                     {choice[1].check && <i className = "fa-solid fa-check"></i>}<span>To Read</span>
                             </div>
 
 
                             <div className = "modal__category"
-                                 id = "3" 
+                                 id = "modal-readingNow" 
                                  onClick = {function(event){showCheck(event.currentTarget.id)}}>
                                     {choice[2].check && <i className = "fa-solid fa-check"></i>}<span>Reading Now</span>
                             </div>
 
                             <div className = "modal__category"
-                                 id = "4" 
+                                 id = "modal-haveRead" 
                                  onClick = {function(event){showCheck(event.currentTarget.id)}}>
                                     {choice[3].check && <i className = "fa-solid fa-check"></i>}<span>Have Read</span>
                             </div>

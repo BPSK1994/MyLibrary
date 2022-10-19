@@ -3,13 +3,7 @@ import Table from './Table'
 
 const Section = function(
     {
-        searchData,
         submit,
-
-        favorite,
-        toRead,
-        readingNow,
-        haveRead,
 
         removeFavorite,
         removeToRead,
@@ -22,7 +16,6 @@ const Section = function(
         haveReadArray,
 
         category,
-        table
         
     }
 ) {
@@ -30,22 +23,14 @@ const Section = function(
 
     return(
         <section className = "content-container">
-            {submit  && (<Table 
-                searchData = {searchData}
-                favorite = {favorite}
-                toRead = {toRead}
-                readingNow = {readingNow}
-                haveRead = {haveRead}
-                table = {table}/>)
-            }
-
+            {submit  && (<Table />)}
 
         {/* Home */}
-        {category == 5 && <></>}
+        {category === "category-home" && <React.Fragment></React.Fragment>}
 
         {/* Favorite Category */}
     
-        {category == 6 && 
+        {category === "category-favorites" && 
             (<div className = "category">
                 <h1 className = "category__title">Favorite Books</h1> 
                 <div className = "book book--flex">  
@@ -58,7 +43,7 @@ const Section = function(
                                     <h5 className = "book-item__authors">{item.volumeInfo.authors}</h5>
                                     <h5 className = "book-item--remove" onClick = {function(){removeFavorite(item.id)}}>remove</h5>
                                 </div>
-                            )
+                            );
                     })}
                 </div>
             </div>)
@@ -66,7 +51,7 @@ const Section = function(
 
         {/*To read category */}
 
-        {category == 7 && 
+        {category === "category-toRead" && 
             (<div className = "category">
                 <h1 className = "category__title">To Read</h1> 
                 <div className = "book book--flex">  
@@ -87,7 +72,7 @@ const Section = function(
 
          {/*Reading Now category */}
 
-         {category == 8 && 
+         {category === "category-readingNow" && 
             (<div className = "category">
                 <h1 className = "category__title">Reading Now</h1> 
                 <div className = "book book--flex">  
@@ -108,7 +93,7 @@ const Section = function(
 
          {/*Have read category */}
 
-         {category == 9 && 
+         {category === "category-haveRead" && 
             (<div className = "category">
                 <h1 className = "category__title">Have Read</h1> 
                 <div className = "book--flex">  

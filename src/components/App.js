@@ -1,275 +1,225 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import Header from './Header';
 import Categories from './Categories';
 import Section from './Section';
+import reducer from './reducer';
 
 
-const favoriteLocalStorage = function() {
-    let favoriteArray = localStorage.getItem("favoriteArray");
-    if(favoriteArray) {
-        return (favoriteArray = JSON.parse(favoriteArray)); 
-    } else {
-        return [];
-    }
-}
+ export const appContext = createContext();
 
-const toReadLocalStorage = function() {
-    let toReadArray = localStorage.getItem("toReadArray");
-    if(toReadArray) {
-        return (toReadArray = JSON.parse(toReadArray)); 
-    } else {
-        return [];
-    }
-}
+/* LOCAL STORAGE */
+let favoriteLocalStorage = JSON.parse(localStorage.getItem("favoriteArray")) || [];
+let toReadLocalStorage = JSON.parse(localStorage.getItem("toReadArray")) || [];
+let readingNowLocalStorage = JSON.parse(localStorage.getItem("readingNowArray")) || [];
+let haveReadLocalStorage = JSON.parse(localStorage.getItem("haveReadArray")) || [];
 
 
-const readingNowLocalStorage = function() {
-    let readingNowArray = localStorage.getItem("readingNowArray");
-    if(readingNowArray) {
-        return (readingNowArray = JSON.parse(readingNowArray)); 
-    } else {
-        return [];
-    }
-}
-
-
-const haveReadLocalStorage = function() {
-    let haveReadArray = localStorage.getItem("haveReadArray");
-    if(haveReadArray) {
-        return (haveReadArray = JSON.parse(haveReadArray)); 
-    } else {
-        return [];
-    }
+const defaultState = {
+    searchData: [],
+    favoriteArray: favoriteLocalStorage,
+    toReadArray: toReadLocalStorage,
+    readingNowArray: readingNowLocalStorage,
+    haveReadArray: haveReadLocalStorage,
+    categoryId: null,
+    table: true,
+    submit: false
 }
 
 const App = function() {
     
+    const [input, setInput] = React.useState(""); 
+    const [state, dispatch] = React.useReducer(reducer, defaultState);
 
-    const[input, setInput] = React.useState(""); 
-    const[submit, setSubmit] = React.useState(false);
-    const[searchData, setSearchData] = React.useState([]);
-    
+    /* USE EFFECT */
 
-    const[favoriteArray, setFavoriteArray] = React.useState(favoriteLocalStorage);       /* Books "favorite" array */
-    const[toReadArray, setToReadArray] = React.useState(toReadLocalStorage);             /* Books "to read" array */
-    const[readingNowArray, setReadingNowArray] = React.useState(readingNowLocalStorage); /* Books "reading now" array */
-    const[haveReadArray, setHaveReadArray] = React.useState(haveReadLocalStorage);       /* Books "have read" array */
-
-    const[category, setCategory] = React.useState();
-    const[table, setTable] = React.useState(true);
-    
-
-   
-    
     React.useEffect(function() {
         fetch(`https://www.googleapis.com/books/v1/volumes?q=${input}&key=AIzaSyA0fW77QbUTmr1v98shRdDHxpl9AG7cpzI&maxResults=40`)
-        .then(res => res.json())
-        .then(data => setSearchData(data.items))
-         }, [submit]);
+        .then(function(response) {
+           return response.json();
+        })
+        .then(function(data) {
+            dispatch({type: "SEARCH_DATA", payload: data.items})
+        })}, [state.submit]);
 
-
-    // Local storage
     
     React.useEffect(function() {
-        localStorage.setItem("favoriteArray", JSON.stringify(favoriteArray))
-    }, [favoriteArray])
-        
+        localStorage.setItem("favoriteArray", JSON.stringify(state.favoriteArray))
+    }, [state.favoriteArray]);
 
     React.useEffect(function() {
-        localStorage.setItem("toReadArray", JSON.stringify(toReadArray))
-    }, [toReadArray])
-
-
-    React.useEffect(function() {
-        localStorage.setItem("readingNowArray", JSON.stringify(readingNowArray))
-    }, [readingNowArray])
-
+        localStorage.setItem("toReadArray", JSON.stringify(state.toReadArray))
+    }, [state.toReadArray]);
 
     React.useEffect(function() {
-        localStorage.setItem("haveReadArray", JSON.stringify(haveReadArray))
-    }, [haveReadArray])
-        
-        
+        localStorage.setItem("readingNowArray", JSON.stringify(state.readingNowArray))
+    }, [state.readingNowArray]);
+
+    React.useEffect(function() {
+        localStorage.setItem("haveReadArray", JSON.stringify(state.haveReadArray))
+    }, [state.haveReadArray]);
+
+
+
+    /* FUNCTIONS */
+
+    /* HANDLE SUBMIT FUNCTION */
     const handleSubmit = function(event) {
         event.preventDefault();
-        setSubmit(true);
+        dispatch({type: "SUBMIT_TRUE"});
     }
 
+    /* HANDLE CHANGE FUNCTION */
     const handleChange = function(event) {
         setInput(event.target.value);
         if(input === "") {
-            setSubmit(false);
+            dispatch({type: "SUBMIT_FALSE"});
         }
     }
         
-    // Add books to Favorite books array
+    // ADD BOOKS TO "FAVORITE BOOKS" ARRAY
     const favorite = function(book) {
-        const duplicateBook = favoriteArray.find(function(item) {
+        const duplicateBook = state.favoriteArray.find(function(item) {
             return item.id === book.id;
         })
       
         if(duplicateBook) {
-            setFavoriteArray([...favoriteArray])
+            dispatch({type: "DONT_ADD_DUPLICATE"});
         } else {
-            setFavoriteArray([...favoriteArray, book]);
+            dispatch({type: "ADD_FAVORITE_BOOK", payload: book });
         }    
     }
 
             
-    // Add books to "to read" array    
+    // ADD BOOKS TO "TO READ" ARRAY  
     const toRead = function(book) {
-        const duplicateBook = toReadArray.find(function(item) {
+        const duplicateBook = state.toReadArray.find(function(item) {
             return item.id === book.id;
         });
 
         if(duplicateBook) {
-            setToReadArray([...toReadArray]);    
+           dispatch({type: "DONT_ADD_DUPLICATE"});   
         } else {
-            setToReadArray([...toReadArray, book]);
+            dispatch({type: "ADD_TO_READ_BOOK", payload: book});
         }  
     }
 
 
-    // Add books to "reading now" array    
+    // ADD BOOKS TO "READING NOW BOOKS" ARRAY
     const readingNow = function(book) {
-        const duplicateBook = readingNowArray.find(function(item) {
+        const duplicateBook = state.readingNowArray.find(function(item) {
             return item.id === book.id;
         });
 
         if(duplicateBook) {
-            setReadingNowArray([...readingNowArray]);
+            dispatch({type: "DONT_ADD_DUPLICATE"})
         } else {
-            setReadingNowArray([...readingNowArray, book]);
+            dispatch({type: "ADD_READING_NOW_BOOK", payload: book})
         }
     }
 
     
-
-    // Add books to "have read" array    
+    // ADD BOOKS TO "HAVE READ" ARRAY    
     const haveRead = function(book) {
-        const duplicateBook = haveReadArray.find(function(item) {
+        const duplicateBook = state.haveReadArray.find(function(item) {
             return item.id === book.id;
         });
 
         if(duplicateBook) {
-            setHaveReadArray([...haveReadArray]);
+            dispatch({type: "DONT_ADD_DUPLICATE"})
         } else {
-            setHaveReadArray([...haveReadArray, book]);
+            dispatch({type: "ADD_HAVE_READ_BOOK", payload: book})
         }
     }
 
 
-    // Remove books from 'favorite' books array
+    // REMOVE BOOKS FROM 'FAVORITE' BOOKS ARRAY
 
     const removeFavorite = function(id) {
-        setFavoriteArray(favoriteArray.filter(function(item) {
-            return (item.id !== id)
-        }))
-    }
+        dispatch({type: "REMOVE_FAVORITE", payload: id});    
+    };
 
-
-    // Remove books from 'to read' books array
+    // REMOVE BOOKS FROM 'TO READ' BOOKS ARRAY
     const removeToRead = function(id) {
-        setToReadArray(toReadArray.filter(function(item) {
-            return (item.id !== id)
-        }))
-    }
+        dispatch({type: "REMOVE_TO_READ", payload: id});
+    };
 
-
-
-
-    // Remove books from 'reading now' books array
+    // REMOVE BOOKS FROM 'READING NOW' BOOKS ARRAY
     const removeReadingNow = function(id) {
-        setReadingNowArray(readingNowArray.filter(function(item) {
-            return (item.id !== id)
-        }))
-    }
+          dispatch({type: "REMOVE_READING_NOW", payload: id});
+    };
 
-
-
-    // Remove books from 'have read' books array
+    // REMOVE BOOKS FROM 'HAVE READ' BOOKS ARRAY
     const removeHaveRead = function(id) {
-        setHaveReadArray(haveReadArray.filter(function(item) {
-            return (item.id !== id)
-        }))
-    }
-
+        dispatch({type: "REMOVE_HAVE_READ", payload: id});
+    };
 
 
     const categoryId = function(id) {
-        setCategory(id);
-        }
+        dispatch({type: "CATEGORY_ID", payload: id});
+        };
          
 
     const removeTable = function() {
-        setTable(false);
-        }
+        dispatch({type: "DONT_SHOW_TABLE"});
+        };
 
-    
     const showTable = function() {
-        setTable(true);
-    }
+        dispatch({type: "SHOW_TABLE"});
+    };
   
-
         
     return(
-        <div className = "container">
-            <div className = "sidebar-container">
-                <Header />
-                <div className = "form">
-                    <form className = "form__control" onSubmit = {handleSubmit}>
-                        <input className = "form__input"
-                            type = "text"
-                            value = {input}
-                            placeholder = "Search for books..."
-                            onChange = {function(event) {handleChange(event)}}
-                            />
-                        <button className = "search-btn"
-                                type = "submit">Search
-                        </button>
-                    </form>
-                </div>
-                
-                <Categories
-                
-                    favoriteArray = {favoriteArray}
-                    toReadArray = {toReadArray}
-                    readingNowArray = {readingNowArray}
-                    haveReadArray = {haveReadArray}
-
-                    removeTable = {removeTable}
-                    showTable = {showTable}
-                    categoryId = {categoryId}
-                    />
-            </div>
-
-            <div className = "main-container">
-                <Section
-                    searchData = {searchData}
-                    submit = {submit}
-
-                    favorite = {favorite}
-                    toRead = {toRead}
-                    readingNow = {readingNow}
-                    haveRead = {haveRead}
-
-                    removeFavorite = {removeFavorite}
-                    removeToRead = {removeToRead}
-                    removeReadingNow = {removeReadingNow}
-                    removeHaveRead = {removeHaveRead}
-
-                    favoriteArray = {favoriteArray}
-                    toReadArray = {toReadArray}
-                    readingNowArray = {readingNowArray}
-                    haveReadArray = {haveReadArray}
-
-                    category = {category}
-                    table = {table}
+        <appContext.Provider value = {{favorite, toRead, haveRead, readingNow, searchData: state.searchData, table: state.table}}>
+            <div className = "container">
+                <div className = "sidebar-container">
+                    <Header />
+                    <div className = "form">
+                        <form className = "form__control" onSubmit = {handleSubmit}>
+                            <input className = "form__input"
+                                type = "text"
+                                value = {input}
+                                placeholder = "Search for books..."
+                                onChange = {function(event) {handleChange(event)}}
+                                />
+                            <button className = "search-btn"
+                                    type = "submit">Search
+                            </button>
+                        </form>
+                    </div>
                     
-                    />
+                    <Categories
+                    
+                        favoriteArray = {state.favoriteArray}
+                        toReadArray = {state.toReadArray}
+                        readingNowArray = {state.readingNowArray}
+                        haveReadArray = {state.haveReadArray}
+
+                        removeTable = {removeTable}
+                        showTable = {showTable}
+                        categoryId = {categoryId}
+                        />
+                </div>
+
+                <div className = "main-container">
+                    <Section
+                        submit = {state.submit}
+
+                        removeFavorite = {removeFavorite}
+                        removeToRead = {removeToRead}
+                        removeReadingNow = {removeReadingNow}
+                        removeHaveRead = {removeHaveRead}
+
+                        favoriteArray = {state.favoriteArray}
+                        toReadArray = {state.toReadArray}
+                        readingNowArray = {state.readingNowArray}
+                        haveReadArray = {state.haveReadArray}
+
+                        category = {state.categoryId}
+                        />
+                </div>
             </div>
-        </div>
-    )
-}
+        </appContext.Provider>
+    );
+};
 
 export default App

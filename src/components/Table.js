@@ -1,18 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Modal from './Modal'
+import { appContext } from './App';
 
-const Table = function(
-    {
-        searchData,
+const Table = function() { 
 
-        favorite,
-        toRead,
-        readingNow,
-        haveRead,
-
-        table
-    }
-) { 
+    const {searchData, table} = useContext(appContext);
 
     const[showModal, setShowModal] = React.useState(false);
     const[book, setBook] = React.useState();
@@ -21,13 +13,14 @@ const Table = function(
     const toggleModal = function() {
         setShowModal(function(prevState) {
             return !prevState;
-        })
-    }
+        });
+    };
 
 
     const displayBook = function(item) {
         setBook(item);
     }
+
 
     return (
         <div className = "table-container">
@@ -70,10 +63,6 @@ const Table = function(
             <Modal showModal = {showModal}
                    dontShowModal = {toggleModal}
                    book = {book}
-                   favorite = {favorite}
-                   toRead = {toRead}
-                   readingNow = {readingNow}
-                   haveRead = {haveRead}
                    />
         </div>
     )
